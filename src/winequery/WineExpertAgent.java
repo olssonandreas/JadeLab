@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import prologjava.QueryWineDatabase;
 
 
@@ -48,7 +49,7 @@ public class WineExpertAgent extends Agent {
     private Wine Wine;
 
     protected void setup() {
-        
+        //Register agents
         ServiceDescription sd = new ServiceDescription();
         sd.setType("WineExpert");
         sd.setName(getLocalName());
@@ -58,15 +59,20 @@ public class WineExpertAgent extends Agent {
                 + (agent == null ? "not Found" : agent.getName()));
         AID[] sellers = searchDF("QueryWine");
       
-        for (int i = 0; i < sellers.length; i++) {
-            System.out.print(sellers[i].getLocalName() + ",  ");
-            targetAgent = sellers[i].getLocalName();
+        for (AID seller : sellers) {
+            System.out.print(seller.getLocalName() + ",  ");
+            targetAgent = seller.getLocalName();
         }
         System.out.println();
        
         addBehaviour(new CyclicBehaviour(this) {
             public void action() {
                 
+                // Load Jena properties. 
+                String log4jConfPath = "jena-log4j.properties";
+                PropertyConfigurator.configure(log4jConfPath);
+          
+                // Query sparql and create prolog predicates before.
                 try {
                     querySparql();
                 } catch (IOException ex) {
@@ -152,7 +158,6 @@ public class WineExpertAgent extends Agent {
             dfd.addServices(sd);
             DFService.register(this, dfd);
         } catch (FIPAException fe) {
-            fe.printStackTrace();
         }
     }
 
@@ -168,7 +173,6 @@ public class WineExpertAgent extends Agent {
                 return result[0].getName();
             }
         } catch (FIPAException fe) {
-            fe.printStackTrace();
         }
         return null;
     }
@@ -192,7 +196,6 @@ public class WineExpertAgent extends Agent {
             return agents;
 
         } catch (FIPAException fe) {
-            fe.printStackTrace();
         }
 
         return null;
@@ -203,7 +206,7 @@ public class WineExpertAgent extends Agent {
      * This method takes an prolog question as input and gives you a random
      * answer from the arraylist.
      *
-     * @param query
+     * @param _query  = what to ask prolog
      * @throws Exception
      */
     public String runModel(String _query) throws Exception {
@@ -258,9 +261,9 @@ public class WineExpertAgent extends Agent {
 
     /**
      * This metod queries the ontology for all wines and their resources and
-     * returns them as prolog predicates
+     * builds a string with all of them
      *
-     * @return all wines in prolog predicates
+     * @throws java.io.IOException
      */
     public void querySparql() throws IOException {
 
@@ -336,7 +339,7 @@ public class WineExpertAgent extends Agent {
 
         }
         
-   
+        // Write them to a prolog predicate file.
         predicatesToFile(prologPredicate);
         
        

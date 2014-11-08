@@ -11,11 +11,12 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import org.apache.log4j.PropertyConfigurator;
 
 public class QueryWineAgent extends Agent {
 
-    public String targetAgent;
-
+   public String targetAgent;
+   
     @Override
     protected void setup() {
         ServiceDescription sd = new ServiceDescription();
@@ -27,15 +28,18 @@ public class QueryWineAgent extends Agent {
                 + (agent == null ? "not Found" : agent.getName()));
         AID[] buyers = searchDF("WineExpert");
 
-        for (int i = 0; i < buyers.length; i++) {
-            System.out.print(buyers[i].getLocalName() + ",  ");
-            targetAgent = buyers[i].getLocalName();
-        }
+       for (AID buyer : buyers) {
+           targetAgent = buyer.getLocalName();
+       }
         System.out.println();
 
         addBehaviour(new CyclicBehaviour(this) {
 
+           // Message to send 
+            @Override
             public void action() {
+                
+                
                 ACLMessage remsg = receive();
                 if (remsg == null) {
                     System.out.println("--- Question 1 ---");
@@ -62,7 +66,7 @@ public class QueryWineAgent extends Agent {
                         System.out.println("QWA - incoming message: " + remsg.getContent());
                         System.out.println("--- Question 3 --");
                         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                        msg.setContent("wine(Output,_,_,full,_,_,_)");
+                        msg.setContent("wine(Output,_,_,medium,_,_,_)");
                         msg.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
                         msg.setConversationId("3");
                         System.out.println("QWA - msg3: " + msg.getContent() + " sent with ID " + msg.getConversationId());
@@ -136,7 +140,6 @@ public class QueryWineAgent extends Agent {
             return agents;
 
         } catch (FIPAException fe) {
-            fe.printStackTrace();
         }
 
         return null;
