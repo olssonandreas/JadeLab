@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/Users/andreas/NetBeansProjects/Jade1/../../Desktop/wine.xml" uri="xml-resources/jaxb/allWines/wine.xml.xsd"/>
+    <system systemId="file:/Users/andreas/NetBeansProjects/JadeLabAssignment/../../Desktop/wine.xml" uri="xml-resources/jaxb/findWineName/wine.xml.xsd"/>
+</catalog>

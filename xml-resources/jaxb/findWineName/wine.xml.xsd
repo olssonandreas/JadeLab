@@ -1,0 +1,23 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name='wine'>
+	<xs:complexType>	
+		<xs:sequence>
+
+			<xs:element name='wineSugar' type='xs:string' />
+
+			<xs:element name='wineName' type='xs:string' />
+
+			<xs:element name='wineRegion' type='xs:string' />
+
+			<xs:element name='wineColor' type='xs:string' />
+
+			<xs:element name='wineFlavor' type='xs:string' />
+
+			<xs:element name='wineBody' type='xs:string' />
+
+			<xs:element name='winery' type='xs:string' />
+
+		</xs:sequence >
+	</xs:complexType >
+    </xs:element >
+</xs:schema>
