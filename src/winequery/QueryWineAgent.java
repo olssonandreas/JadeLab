@@ -16,6 +16,7 @@ public class QueryWineAgent extends Agent {
 
     public String targetAgent;
 
+    @Override
     protected void setup() {
         ServiceDescription sd = new ServiceDescription();
         sd.setType("QueryWine");
@@ -61,7 +62,7 @@ public class QueryWineAgent extends Agent {
                         System.out.println("QWA - incoming message: " + remsg.getContent());
                         System.out.println("--- Question 3 --");
                         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                        msg.setContent("wine(_,Output,_,full,_,_,_)");
+                        msg.setContent("wine(Output,_,_,full,_,_,_)");
                         msg.addReceiver(new AID(targetAgent, AID.ISLOCALNAME));
                         msg.setConversationId("3");
                         System.out.println("QWA - msg3: " + msg.getContent() + " sent with ID " + msg.getConversationId());
